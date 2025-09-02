@@ -50,24 +50,41 @@
     <title>Panorama</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     
     <link href="{{ asset('css/sekolah.css') }}" rel="stylesheet">
     <style>
-        .sidebar-content {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-        }
-        #sidebar-scroll-area {
-            flex: 1;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-    </style>
+    /* Force primary color to Bootstrap blue on this page to match Sekolah */
+    :root {
+        --bs-primary: #0d6efd;
+    }
+    .panorama-page .text-primary { color: #0d6efd !important; }
+    .panorama-page .btn-outline-primary { color: #0d6efd !important; border-color: #0d6efd !important; }
+    .panorama-page .btn-outline-primary:hover { background-color: #0d6efd !important; color: #fff !important; }
+    .sidebar-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+#sidebar-scroll-area {
+    flex: 1; /* biar bagian menu isi ruang sisa */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* footer selalu nempel bawah */
+.sidebar-footer {
+    margin-top: auto;
+    background: linear-gradient(180deg, var(--primary-color) 0%, #34495e 100%);
+    padding: 10px 15px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+</style>
 </head>
 
-<body>
+<body class="panorama-page">
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
         <div class="container-fluid">
             <button class="btn btn-outline-primary me-3" type="button" id="sidebarToggle">
@@ -75,7 +92,7 @@
             </button>
             <div class="navbar-brand">
                 <div>
-                    <i class="fas fa-camera-retro text-primary me-2"></i>
+                    <i class="fas fa-video text-primary me-2"></i>
                     CCTV PANORAMA
                 </div>
                 <div style="font-size: 0.7rem; color: #6c757d; font-weight: normal;">
@@ -111,7 +128,7 @@
                         </div>
                     </div>
                     <div class="col-4">
-                        <button id="sidebarHideAllBtn" class="btn btn-sm hide-all-btn w-100" style="font-size: 0.7rem; padding: 8px 5px; border-radius: 25px;" disabled>
+                        <button id="sidebarHideAllBtn" class="btn btn-sm hide-all-btn w-100" style="font-size: 0.7rem; padding: 8px 5px; border-radius: 50px;" disabled>
                             <i id="sidebarHideAllIcon" class="fas fa-eye-slash me-1"></i>
                             <span id="sidebarHideAllText">Sembunyikan</span>
                         </button>
@@ -119,8 +136,9 @@
                 </div>
             </div>
 
-            <div class="flex-grow-1 overflow-auto px-2" id="sidebar-scroll-area">
-                <ul class="sidebar-nav">
+            <div class="sidebar-nav-wrapper d-flex flex-column h-100 px-2">
+                <div class="flex-grow-1 overflow-auto" id="sidebar-scroll-area">
+                    <ul class="sidebar-nav">
                     <li class="sidebar-item">
                         <div class="sidebar-link d-flex justify-content-between align-items-center" onclick="toggleDropdown('cctvDropdown')">
                             <span><i class="fas fa-camera-retro me-2"></i>Panorama Monitoring</span>
@@ -162,7 +180,8 @@
                             @endforeach
                         </div>
                     </li>
-                </ul>
+                    </ul>
+                </div>
             </div>
             
                 <div class="mt-2 pt-2 pb-2 border-top border-white border-opacity-10">
@@ -213,7 +232,7 @@
                     </div>
                 </div>
                 <div class="col-md-4 col-sm-6 mb-3">
-                    <div class="card border-0 shadow-sm h-100" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">
+                    <div class="card border-0 shadow-sm h-100" style="background: linear-gradient(135deg, #27ae60, #229954);">
                         <div class="card-body text-white">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
