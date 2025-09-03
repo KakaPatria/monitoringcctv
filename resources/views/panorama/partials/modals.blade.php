@@ -19,6 +19,7 @@
                             <option value="KABUPATEN BANTUL">KAB BANTUL</option>
                             <option value="KABUPATEN KP">KAB KULONPROGO</option>
                             <option value="KABUPATEN GK">KAB GUNUNG KIDUL</option>
+                            <option value="KABUPATEN GK">KHUSUS</option>
                         </select>
                     </div>
                     <div class="mb-3">

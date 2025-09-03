@@ -1,4 +1,5 @@
 // Global functions that need to be accessible from onclick attributes
+// (debug logs removed)
         
         function toggleDropdown(dropdownId) {
             const dropdown = document.getElementById(dropdownId);
@@ -102,7 +103,6 @@
 
         function ensureCardRenderedById(cardId) {
                     if (document.getElementById(cardId)) {
-                        console.debug('[ensureCardRenderedById] already in DOM:', cardId);
                         return true;
                     }
                     // Safe lookup: prefer fast map but fallback to searching the index if map missing
@@ -120,13 +120,11 @@
                         }
                     }
                     if (!item) {
-                        console.debug('[ensureCardRenderedById] not found in index:', cardId);
                         return false;
                     }
-                    console.debug('[ensureCardRenderedById] rendering:', cardId, 'from index');
+                    // rendering from index
                     renderCard(item);
                     const ok = !!document.getElementById(cardId);
-                    console.debug('[ensureCardRenderedById] render result:', cardId, ok);
                     return ok;
         }
         function showCard(cardEl) {
@@ -225,8 +223,6 @@
             if (!eye) return;
             const anyVisible = Array.from(document.querySelectorAll(`#cctvGrid .cctv-card[data-sekolah="${sekolahSlug}"]`))
                 .some(card => (card.dataset && card.dataset.isActive === '1') || (card.style && card.style.display && card.style.display !== 'none'));
-
-            console.debug('[updateSchoolEyeIcon]', sekolahSlug, 'anyVisible=', anyVisible);
             eye.classList.remove('fa-eye', 'fa-eye-slash');
             eye.classList.add(anyVisible ? 'fa-eye' : 'fa-eye-slash');
         }
@@ -318,7 +314,7 @@
         // Fungsi untuk menampilkan semua CCTV di sekolah tertentu
         function toggleAllSchoolCCTV(namaSekolah) {
                     const schoolSlug = slugify(namaSekolah);
-                    console.debug('[toggleAllSchoolCCTV] school:', namaSekolah, 'slug:', schoolSlug);
+                    // toggleAllSchoolCCTV debug removed
 
                     // Collect card IDs for this school: DOM cards + index entries if any
                     let cardEls = Array.from(document.querySelectorAll(`.cctv-card[data-sekolah="${schoolSlug}"]`));
@@ -335,7 +331,6 @@
                     // Determine current state by dataset flag or visible style
                     const anyActive = cardEls.some(card => (card.dataset && card.dataset.isActive === '1') || (card.style && card.style.display && card.style.display !== 'none'));
                     const targetShow = !anyActive;
-                    console.debug('[toggleAllSchoolCCTV] cards:', cardEls.map(c=>c.id), 'anyActive:', anyActive, 'targetShow:', targetShow);
 
                     // Toggle each card directly and then sync sidebar checkbox state so UI follows immediately
                     cardEls.forEach(card => {
@@ -344,10 +339,8 @@
 
                         if (targetShow) {
                             showCard(el);
-                            console.debug('[toggleAllSchoolCCTV] showCard:', el.id);
                         } else {
                             hideCard(el);
-                            console.debug('[toggleAllSchoolCCTV] hideCard:', el.id);
                         }
 
                         // Sync sidebar checkbox if exists (no need to dispatch change)
@@ -647,21 +640,60 @@
                 saveActiveCCTVState();
             });
 
-            // Fungsi untuk pencarian di sidebar
-            document.getElementById('sidebarSearchInput').addEventListener('input', function() {
-                const searchTerm = this.value.toLowerCase();
-                const dropdownItems = document.querySelectorAll('.dropdown-item');
-                
-                if (searchTerm.length === 0) {
-                    dropdownItems.forEach(item => item.style.display = 'block');
-                    return;
+            // Fungsi untuk pencarian di sidebar - pasang sesuai elemen yang tersedia
+            (function() {
+                function normalize(s) { try { return (s||'').toString().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^\w\s-]/g,' ').replace(/\s+/g,' ').trim().toLowerCase(); } catch(e) { return (s||'').toString().toLowerCase().replace(/[^a-z0-9\s-]/g,' ').replace(/\s+/g,' ').trim(); } }
+
+                const legacy = document.getElementById('sidebarSearchInput');
+                const panorama = document.getElementById('sidebarSearchInputPanorama');
+
+                // search init logs removed
+
+                if (legacy) {
+                    legacy.addEventListener('input', function() {
+                        const q = (this.value||'').toLowerCase();
+                        const items = document.querySelectorAll('.dropdown-item');
+                        if (!q) { items.forEach(i=>i.style.display='block'); return; }
+                        items.forEach(it => { it.style.display = (it.textContent||'').toLowerCase().indexOf(q) !== -1 ? 'block' : 'none'; });
+                        return;
+                    });
                 }
-                
-                dropdownItems.forEach(item => {
-                    const text = item.textContent.toLowerCase();
-                    item.style.display = text.includes(searchTerm) ? 'block' : 'none';
-                });
-            });
+
+                if (panorama) {
+                    // panorama listener attached
+                    panorama.addEventListener('input', function() {
+                        const raw = this.value || '';
+                        const q = normalize(raw);
+                        const topItems = document.querySelectorAll('#cctvDropdown > .dropdown-item');
+                        if (!q) { topItems.forEach(i=>i.style.display='block'); return; }
+                        let matched = 0;
+                        topItems.forEach(it => {
+                            const left = it.querySelector('div');
+                            const label = left ? left.textContent : it.textContent;
+                            const nl = normalize(label || '');
+                            const match = nl.indexOf(q) !== -1 || nl.split(' ').some(t=>t.indexOf(q)!==-1);
+                            if (match) matched++;
+                            // Use hidden + important display to avoid CSS overriding inline display
+                            try {
+                                if (match) {
+                                    it.hidden = false;
+                                    it.removeAttribute('aria-hidden');
+                                    // remove forced inline display so stylesheet controls layout (flex/inline-flex etc)
+                                    it.style.removeProperty('display');
+                                } else {
+                                    it.hidden = true;
+                                    it.setAttribute('aria-hidden', 'true');
+                                    it.style.setProperty('display', 'none', 'important');
+                                }
+                            } catch (e) {
+                                // fallback
+                                it.style.display = match ? '' : 'none';
+                            }
+                        });
+                        // panorama matched log removed
+                    });
+                }
+            })();
 
             // Initialize restore preference UI (if present) and wire persistence
             try {
@@ -679,7 +711,7 @@
 
             // Ensure every eye icon has a reliable click handler (prevent relying on inline handlers)
             document.querySelectorAll('[id^="eye-"]').forEach(icon => {
-                try {
+                    try {
                     icon.style.cursor = 'pointer';
                     // Remove any previous bound listener by cloning the node (defensive)
                     const newIcon = icon.cloneNode(true);
@@ -689,7 +721,6 @@
                     newIcon.addEventListener('click', function(e) {
                         e.stopPropagation();
                         const slug = (this.id || '').replace('eye-', '');
-                        console.debug('[eye] clicked', slug);
                         try { toggleAllSchoolCCTV(slug); } catch (err) { console.error(err); }
                     });
                 } catch (err) {

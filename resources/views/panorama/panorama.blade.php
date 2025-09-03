@@ -124,7 +124,9 @@
                     <div class="col-8">
                         <div class="search-box">
                             <i class="fas fa-search"></i>
-                            <input type="text" class="form-control form-control-sm" id="sidebarSearchInput" placeholder="Cari..." style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: white; font-size: 0.8rem; padding: 8px 15px 8px 35px;">
+                            <!-- gunakan id khusus untuk Panorama agar tidak bertabrakan dengan halaman Sekolah -->
+                                <input type="text" class="form-control form-control-sm" id="sidebarSearchInputPanorama" placeholder="Cari..." style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: white; font-size: 0.8rem; padding: 8px 15px 8px 35px;">
+                                <!-- khusus Panorama: gunakan id berbeda agar tidak konflik dengan halaman Sekolah -->
                         </div>
                     </div>
                     <div class="col-4">
