@@ -229,6 +229,8 @@
             padding: 12px 20px 12px 45px;
             border: 2px solid #e9ecef;
             transition: all 0.3s ease;
+                    color: #ffffff !important;
+                    background: rgba(255,255,255,0.04) !important;
         }
 
         .search-box input:focus {
@@ -243,6 +245,14 @@
             transform: translateY(-50%);
             color: #6c757d;
         }
+
+        /* Placeholder color (cross-browser) */
+        .search-box input::placeholder { color: rgba(255,255,255,0.65) !important; }
+        .search-box input::-webkit-input-placeholder { color: rgba(255,255,255,0.65) !important; }
+        .search-box input:-ms-input-placeholder { color: rgba(255,255,255,0.65) !important; }
+        .search-box input::-ms-input-placeholder { color: rgba(255,255,255,0.65) !important; }
+        .search-box input:-moz-placeholder { color: rgba(255,255,255,0.65) !important; opacity: 1; }
+        .search-box input::-moz-placeholder { color: rgba(255,255,255,0.65) !important; opacity: 1; }
 
         .hide-all-btn {
             background: var(--accent-color);
@@ -464,6 +474,26 @@
             border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
+/* Panorama page: make summary numbers white to match Sekolah theme */
+.panorama-page .card .card-body h3 {
+    color: #ffffff !important;
+}
+
+/* Slightly dimmer subtitle text for readability */
+.panorama-page .card .card-body p {
+    color: rgba(255,255,255,0.85) !important;
+}
+
+/* Stronger specificity fallback: force white on any headline inside panorama cards */
+html body.panorama-page .main-content .card .card-body,
+html body.panorama-page .main-content .card .card-body h3 {
+    color: #ffffff !important;
+}
+
+/* Optional subtle text shadow to increase contrast on gradient backgrounds */
+html body.panorama-page .main-content .card .card-body h3 {
+    text-shadow: 0 1px 0 rgba(0,0,0,0.25);
+}
 /* CCTV Display Styles - No Grid Layout */
         .cctv-display-area {
             margin-top: 20px;
