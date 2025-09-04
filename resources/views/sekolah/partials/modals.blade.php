@@ -19,6 +19,7 @@
                             <option value="3">KABUPATEN SLEMAN</option>
                             <option value="4">KABUPATEN GUNUNG KIDUL</option>
                             <option value="5">KABUPATEN KULON PROGO</option>
+                            <option value="6">KHUSUS</option>
                         </select>
                     </div>
                     <div class="mb-3"> 
