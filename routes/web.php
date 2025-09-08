@@ -39,6 +39,7 @@ Route::middleware('guest')->group(function () {
 // =====================
 Route::middleware('auth')->group(function () {
     Route::get('/', [SekolahController::class, 'cctvsekolah'])->name('sekolah.sekolah');
+    Route::get('/cctv-publik', [PanoramaController::class, 'dashboard'])->name('panorama.panorama');
 
     Route::get('/dashboard', [SekolahController::class, 'dashboard'])
         ->middleware('role:admin')
@@ -121,7 +122,7 @@ Route::get('/rekapan/detailsekolah', [SekolahController::class, 'daftarSekolah']
 // =====================
 // 🌄 PANORAMA ROUTES
 // =====================
-Route::get('/cctv-publik', [PanoramaController::class, 'dashboard'])->name('panorama.panorama');
+// Route::get('/cctv-publik', [PanoramaController::class, 'dashboard'])->name('panorama.panorama');
 Route::prefix('panorama')->group(function () {
     Route::get('/index', [PanoramaController::class, 'index'])->name('panorama.index');
     Route::post('/store', [PanoramaController::class, 'store'])->name('panorama.store');
