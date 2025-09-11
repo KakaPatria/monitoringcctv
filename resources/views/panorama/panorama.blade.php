@@ -47,7 +47,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
-    <title>Panorama</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -82,6 +81,34 @@
 }
 
 </style>
+    <style>
+    /* Fix: override overly-broad panorama white-text rule for CCTV cards
+       so that namaTitik (card subtitle) remains readable on white cards. */
+    .panorama-page .cctv-card,
+    .panorama-page .cctv-card .card,
+    .panorama-page .cctv-card .card-header,
+    .panorama-page .cctv-card .card-title-text,
+    .panorama-page .cctv-card .card-title,
+    .panorama-page .cctv-card .card-subtitle {
+        color: #2c3e50 !important; /* dark slate for readability */
+    }
+    /* ensure small subtitle uses normal weight and visible size */
+    .panorama-page .cctv-card .card-subtitle { font-weight: 500; opacity: 0.95; }
+    </style>
+    <style>
+    /* Stronger override to beat existing panorama white-text rules (high specificity + !important) */
+    html body.panorama-page .main-content .cctv-grid .cctv-card .card .card-body,
+    html body.panorama-page .main-content .cctv-grid .cctv-card .card .card-body p,
+    html body.panorama-page .main-content .cctv-grid .cctv-card .card .card-header .card-title-text,
+    html body.panorama-page .main-content .cctv-grid .cctv-card .card .card-header .card-title-text p {
+        color: #2c3e50 !important;
+    }
+
+    /* target the common render path that uses center-aligned subtitle */
+    html body.panorama-page .main-content .cctv-grid .cctv-card .card .card-body .text-center {
+        color: #2c3e50 !important;
+    }
+    </style>
 </head>
 
 <body class="panorama-page">
@@ -311,7 +338,7 @@
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <div class="card-title-text">
                                 <p class="card-title mb-0 fw-bold">${fullWilayah}</p>
-                                <p class="card-subtitle mb-0">${shortTitik}</p>
+                                <p class="card-subtitle mb-0">${shortTitik || (item.titik || '(tidak ada nama titik)')}</p>
                             </div>
                             <div class="form-check form-switch">
                                 <input class="form-check-input toggle-switch" type="checkbox" onchange="toggleCCTV(this, '${item.cardId}')">

@@ -79,7 +79,7 @@
                                 <span class="slider"></span>
                             </label>
                         </div>
-                        <p class="text-center mb-2" style="font-size: 0.8rem;">${shortNameOf(item.titik)}</p>
+                        <p class="text-center mb-2" style="font-size: 0.8rem;">${shortNameOf(item.titik) || (item.titik || '(tidak ada nama titik)')}</p>
                         <div class="iframe-container">
                             <div class="iframe-loader">Memuat...</div>
                             <iframe loading="lazy" data-src="${item.link}" frameborder="0" allowfullscreen title="CCTV Live Stream"></iframe>
